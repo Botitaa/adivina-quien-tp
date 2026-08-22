@@ -1,0 +1,11 @@
+# Compilados
+*.class
+out/
+target/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Sistema
+.DS_Store
