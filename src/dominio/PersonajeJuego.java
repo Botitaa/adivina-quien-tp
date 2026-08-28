@@ -50,4 +50,16 @@ public class PersonajeJuego implements Personaje{
     public ColorPelo getColorPelo() {
         return this.colorPelo;
     }
+
+    @Override
+    public String toString() {
+        return "PersonajeJuego{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", genero=" + genero +
+                ", esCalvo=" + esCalvo +
+                ", usaLentes=" + usaLentes +
+                ", colorPelo=" + colorPelo +
+                '}';
+    }
 }

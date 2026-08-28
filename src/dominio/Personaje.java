@@ -10,4 +10,5 @@ public interface Personaje {
     boolean esCalvo();
     boolean usaLentes();
     ColorPelo getColorPelo();
+    String toString();
 }
