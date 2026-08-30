@@ -22,7 +22,6 @@ public class CatalogoPersonajes {
 
         for (Genero genero: Genero.values()){
             for(ColorPelo colorPelo: ColorPelo.values()){
-
                 for (boolean esCalvo: new boolean[]{true, false}){
                     for (boolean usaLentes: new boolean[]{true, false}){
 
