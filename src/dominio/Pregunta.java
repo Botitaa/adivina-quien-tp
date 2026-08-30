@@ -55,6 +55,21 @@ public class Pregunta<T> {
         return preguntas;
     }
 
+    public List<Personaje> filtrar(List<Personaje> candidatos, boolean respuesta){
+
+
+        List<Personaje> filtrado = new ArrayList<>();
+
+        for (Personaje p: candidatos){
+            if(evaluar((PersonajeJuego) p) == respuesta){
+
+                filtrado.add(p);
+            }
+        }
+
+        return filtrado;
+    }
+
     @Override
     public String toString() {
         switch (this.atributo) {
