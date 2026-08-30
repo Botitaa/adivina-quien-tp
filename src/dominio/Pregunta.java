@@ -22,7 +22,6 @@ public class Pregunta<T> {
 
     public boolean evaluar(PersonajeJuego personajeJuego){
 
-
         switch (this.atributo){
             case GENERO:
                 return this.valor.equals(personajeJuego.getGenero());
@@ -35,13 +34,10 @@ public class Pregunta<T> {
             default:
                 throw new IllegalStateException("Atributo no soportado: " + this.atributo);
         }
-
-
-
     }
 
-    public static List<Pregunta> generarTodas() {
-        List<Pregunta> preguntas = new ArrayList<>();
+    public static List<Pregunta<?>> generarTodas() {
+        List<Pregunta<?>> preguntas = new ArrayList<>();
 
         for (Genero g : Genero.values()) {
             preguntas.add(new Pregunta<>(Atributo.GENERO, g));
@@ -61,6 +57,17 @@ public class Pregunta<T> {
 
     @Override
     public String toString() {
-        return "Pregunta{" + atributo + "=" + valor + "}";
+        switch (this.atributo) {
+            case GENERO:
+                return "¿Es de género " + valor + "?";
+            case COLOR_PELO:
+                return "¿Tiene el pelo " + valor + "?";
+            case CALVICIE:
+                return ((Boolean) valor) ? "¿Es calvo?" : "¿No es calvo?";
+            case LENTES:
+                return ((Boolean) valor) ? "¿Usa lentes?" : "¿No usa lentes?";
+            default:
+                throw new IllegalStateException("Atributo no soportado: " + this.atributo);
+        }
     }
 }
