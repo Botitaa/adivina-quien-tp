@@ -10,11 +10,11 @@ public interface Jugador {
 
     void elegirPersonajeSecreto(List<Personaje> personajesDisponible);//elige una vez el personaje secreto entre los disp.
 
-    Jugada decidirJugada(List<Personaje> candidatos, Historial historial); //edcide si preguntar o adivinar
-
-    void recibirRespuesta(Pregunta pregunta, boolean respuesta); //recibe el resultado de la ultima pregunta hecha para actualizar su estado
+    Jugada decidirJugada(List<Personaje> candidatos, Historial historial); //decide si preguntar o adivinar
 
     String getNombre();
 
     boolean responder(Pregunta pregunta);//responde t/f si el pers secreto responde a la pregunta recibida
+
+    boolean esMiPersonajeSecreto(Personaje personaje);
 }
