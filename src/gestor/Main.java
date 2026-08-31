@@ -1,6 +1,7 @@
 package gestor;
 
 import dominio.CatalogoPersonajes;
+import dominio.Jugada;
 import dominio.Personaje;
 import dominio.PersonajeJuego;
 import dominio.Pregunta;
@@ -54,6 +55,35 @@ public class Main {
 
             System.out.printf("%-30s -> filtrar(true): %2d | filtrar(false): %2d | suma OK: %b | sin superposición: %b%n",
                     pregunta, sobrevivenTrue.size(), sobrevivenFalse.size(), sumaCorrecta, sinSuperposicion);
+        }
+
+        System.out.println("\n=== Verificación de Jugada ===");
+
+        // Caso 1: jugada de tipo PREGUNTA
+        Pregunta<?> preguntaElegida = preguntas.get(0);
+        Jugada jugadaPregunta = Jugada.dePregunta(preguntaElegida);
+
+        System.out.println("Jugada creada: " + jugadaPregunta);
+        System.out.println("  tipoJugada: " + jugadaPregunta.getTipoJugada());
+        System.out.println("  pregunta: " + jugadaPregunta.getPregunta());
+        System.out.println("  personajeAdivinado (debe ser null): " + jugadaPregunta.getPersonajeAdivinado());
+
+        // Caso 2: jugada de tipo ADIVINANZA
+        Personaje personajeElegido = personajes.get(0);
+        Jugada jugadaAdivinanza = Jugada.deAdivinanza(personajeElegido);
+
+        System.out.println("\nJugada creada: " + jugadaAdivinanza);
+        System.out.println("  tipoJugada: " + jugadaAdivinanza.getTipoJugada());
+        System.out.println("  pregunta (debe ser null): " + jugadaAdivinanza.getPregunta());
+        System.out.println("  personajeAdivinado: " + jugadaAdivinanza.getPersonajeAdivinado());
+
+        // Simulación de cómo GestorDeJuego va a ramificar según el tipo
+        System.out.println("\n=== Simulación de switch tipo GestorDeJuego ===");
+        for (Jugada j : List.of(jugadaPregunta, jugadaAdivinanza)) {
+            switch (j.getTipoJugada()) {
+                case PREGUNTA -> System.out.println("GestorDeJuego reenvía la pregunta: " + j.getPregunta());
+                case ADIVINANZA -> System.out.println("GestorDeJuego verifica el personaje: " + j.getPersonajeAdivinado());
+            }
         }
     }
 }
