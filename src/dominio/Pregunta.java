@@ -20,17 +20,17 @@ public class Pregunta<T> {
 
     }
 
-    public boolean evaluar(PersonajeJuego personajeJuego){
+    public boolean evaluar(Personaje personaje){
 
         switch (this.atributo){
             case GENERO:
-                return this.valor.equals(personajeJuego.getGenero());
+                return this.valor.equals(personaje.getGenero());
             case LENTES:
-                return (Boolean) this.valor == personajeJuego.usaLentes();
+                return (Boolean) this.valor == personaje.usaLentes();
             case COLOR_PELO:
-                return this.valor.equals(personajeJuego.getColorPelo());
+                return this.valor.equals(personaje.getColorPelo());
             case CALVICIE:
-                return (Boolean) this.valor == personajeJuego.esCalvo();
+                return (Boolean) this.valor == personaje.esCalvo();
             default:
                 throw new IllegalStateException("Atributo no soportado: " + this.atributo);
         }
@@ -61,7 +61,7 @@ public class Pregunta<T> {
         List<Personaje> filtrado = new ArrayList<>();
 
         for (Personaje p: candidatos){
-            if(evaluar((PersonajeJuego) p) == respuesta){
+            if(evaluar(p) == respuesta){
 
                 filtrado.add(p);
             }

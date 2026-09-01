@@ -14,7 +14,7 @@ public interface Jugador {
 
     String getNombre();
 
-    boolean responder(Pregunta pregunta);//responde t/f si el pers secreto responde a la pregunta recibida
+    boolean responder(Pregunta<?> pregunta);//responde t/f si el pers secreto responde a la pregunta recibida
 
     boolean esMiPersonajeSecreto(Personaje personaje);
 }

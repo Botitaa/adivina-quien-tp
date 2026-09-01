@@ -3,7 +3,6 @@ package gestor;
 import dominio.CatalogoPersonajes;
 import dominio.Jugada;
 import dominio.Personaje;
-import dominio.PersonajeJuego;
 import dominio.Pregunta;
 
 import java.util.List;
@@ -33,8 +32,7 @@ public class Main {
             int cantidadFalse = 0;
 
             for (Personaje p : personajes) {
-                PersonajeJuego personaje = (PersonajeJuego) p;
-                boolean resultado = pregunta.evaluar(personaje);
+                boolean resultado = pregunta.evaluar(p);
                 if (resultado) {
                     cantidadTrue++;
                 } else {

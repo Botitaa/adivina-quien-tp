@@ -58,7 +58,7 @@ public class JugadorHumano implements Jugador {
     }
 
     @Override
-    public boolean responder(Pregunta pregunta) {
+    public boolean responder(Pregunta<?> pregunta) {
         if (personajeSecreto == null){
             throw new IllegalStateException(nombre + " todavia no eligio su personaje secreto.");
         }
