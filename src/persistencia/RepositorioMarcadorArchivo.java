@@ -1,6 +1,5 @@
 package persistencia;
 
-import javax.print.DocFlavor;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
