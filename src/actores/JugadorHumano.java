@@ -3,6 +3,7 @@ package actores;
 import dominio.Jugada;
 import dominio.Personaje;
 import dominio.Pregunta;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,7 +21,7 @@ public class JugadorHumano implements Jugador {
     public void elegirPersonajeSecreto(List<Personaje> personajesDisponible) {
         System.out.println(nombre + ", elegi tu personaje secreto:");
         for (int i = 0; i<personajesDisponible.size();i++){
-            System.out.println((i+1)+". "+ personajesDisponible.get(i).getNombre());
+            System.out.println((i+1)+". "+ describir(personajesDisponible.get(i)));
         }
 
         int opcion = leerOpcion(personajesDisponible.size());
@@ -38,7 +39,53 @@ public class JugadorHumano implements Jugador {
 
     @Override
     public Jugada decidirJugada(List<Personaje> candidatos, Historial historial) {
-        throw new UnsupportedOperationException("pdte d implementar");//pendiente de implementar
+        System.out.println("\n" + nombre + ", te quedan " + candidatos.size() + " candidatos posibles.");
+        System.out.println(nombre + ", ¿qué querés hacer?");
+        System.out.println("1. Preguntar");
+        System.out.println("2. Adivinar");
+        int opcion = leerOpcion(2);
+
+        if (opcion == 1) {
+            Pregunta<?> pregunta = elegirPregunta(historial);
+            return Jugada.dePregunta(pregunta);
+        } else {
+            Personaje personajeElegido = elegirPersonajeParaAdivinar(candidatos);
+            return Jugada.deAdivinanza(personajeElegido);
+        }
+    }
+
+    private Pregunta<?> elegirPregunta(Historial historial) {
+        List<Pregunta<?>> disponibles = new ArrayList<>();
+        for (Pregunta<?> pregunta : Pregunta.generarTodas()) {
+            if (!historial.yaSePregunto(pregunta, this)) {
+                disponibles.add(pregunta);
+            }
+        }
+
+        System.out.println(nombre + ", elegí tu pregunta:");
+        for (int i = 0; i < disponibles.size(); i++) {
+            System.out.println((i + 1) + ". " + disponibles.get(i));
+        }
+
+        int opcion = leerOpcion(disponibles.size());
+        return disponibles.get(opcion - 1);
+    }
+
+    private Personaje elegirPersonajeParaAdivinar(List<Personaje> candidatos) {
+        System.out.println(nombre + ", ¿quién creés que es el personaje secreto?");
+        for (int i = 0; i < candidatos.size(); i++) {
+            System.out.println((i + 1) + ". " + describir(candidatos.get(i)));
+        }
+
+        int opcion = leerOpcion(candidatos.size());
+        return candidatos.get(opcion - 1);
+    }
+
+    private String describir(Personaje personaje) {
+        String calvicie = personaje.esCalvo() ? "calvo" : "no calvo";
+        String lentes = personaje.usaLentes() ? "usa lentes" : "no usa lentes";
+        return personaje.getNombre() + " [" + personaje.getGenero() + ", " + calvicie + ", "
+                + lentes + ", pelo " + personaje.getColorPelo() + "]";
     }
 
     @Override
@@ -74,7 +121,7 @@ public class JugadorHumano implements Jugador {
                     return opcion;
                 }
                 System.out.println("Ingresa un numero entre 1 y " + cantidad);
-        }   catch (NumberFormatException e) {
+            }   catch (NumberFormatException e) {
                 System.out.println("Eso no es un numero valido.");
             }
         }
