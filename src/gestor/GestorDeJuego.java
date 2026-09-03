@@ -22,9 +22,11 @@ public class GestorDeJuego {
     private final boolean pausarEntreTurnos;
 
     public GestorDeJuego(Jugador jugadorA, Jugador jugadorB, RepositorioMarcador repositorioMarcador) {
-        this(jugadorA, jugadorB, repositorioMarcador,false);
+        this(jugadorA, jugadorB, repositorioMarcador, false);
     }
-    public GestorDeJuego(Jugador jugadorA, Jugador jugadorB, RepositorioMarcador repositorioMarcador, boolean pausarEntreTurnos) {
+
+    public GestorDeJuego(Jugador jugadorA, Jugador jugadorB, RepositorioMarcador repositorioMarcador,
+                         boolean pausarEntreTurnos) {
         this.jugadorA = jugadorA;
         this.jugadorB = jugadorB;
         this.repositorioMarcador = repositorioMarcador;
@@ -76,33 +78,46 @@ public class GestorDeJuego {
         return random.nextBoolean() ? jugadorA : jugadorB;
     }
 
+    /**
+     * Logging centralizado: todo lo que se imprime del proceso de una
+     * partida vive acá, no en las clases de Jugador. Así el log es
+     * consistente sin importar si juega un humano o cualquier IA.
+     */
     private ProximoTurno jugarTurno(Jugador turnoActual, Jugador rival, List<Personaje> candidatosDelRival) {
+        Consola.encabezadoTurno(turnoActual.getNombre());
+
         Jugada jugada = turnoActual.decidirJugada(candidatosDelRival, historial);
 
         switch (jugada.getTipoJugada()) {
             case PREGUNTA -> {
                 Pregunta<?> pregunta = jugada.getPregunta();
-                System.out.println(turnoActual.getNombre() + " le pregunta a " + rival.getNombre() +":"+ pregunta);
+                Consola.pregunta(turnoActual.getNombre(), rival.getNombre(), pregunta);
+
                 boolean respuesta = rival.responder(pregunta);
-                System.out.println(rival.getNombre() + " responde: " + (respuesta ? "Sí" : "No"));
+                Consola.respuesta(rival.getNombre(), respuesta);
+
                 historial.registrar(turnoActual, pregunta, respuesta);
+
                 List<Personaje> filtrados = pregunta.filtrar(candidatosDelRival, respuesta);
-                System.out.println("Le quedan " + filtrados.size() + " candidatos posibles a " + turnoActual.getNombre() + ".");
+                Consola.candidatosRestantes(turnoActual.getNombre(), filtrados.size());
+                Consola.listarCandidatos(filtrados);
 
                 pausar();
                 return new ProximoTurno(false, filtrados);
             }
             case ADIVINANZA -> {
                 Personaje personajeAdivinado = jugada.getPersonajeAdivinado();
-                System.out.println(turnoActual.getNombre() + " arriesga: " + rival.getNombre()+ " es: " + personajeAdivinado.getNombre()+ "?");
+                Consola.adivinanza(turnoActual.getNombre(), rival.getNombre(), personajeAdivinado);
+
                 if (rival.esMiPersonajeSecreto(personajeAdivinado)) {
-                    System.out.println("Correcto! Era " + personajeAdivinado.getNombre());
+                    Consola.aciertoAdivinanza(personajeAdivinado);
                     pausar();
                     return new ProximoTurno(true, candidatosDelRival);
                 } else {
-                    System.out.println("No, " + rival.getNombre() + " no es " + personajeAdivinado.getNombre() + ". Se descarta de la lista.");
+                    Consola.falloAdivinanza(rival.getNombre(), personajeAdivinado);
                     candidatosDelRival.remove(personajeAdivinado);
-                    System.out.println("Le quedan " + candidatosDelRival.size() + " candidatos posibles a " + turnoActual.getNombre());
+                    Consola.candidatosRestantes(turnoActual.getNombre(), candidatosDelRival.size());
+                    Consola.listarCandidatos(candidatosDelRival);
                     pausar();
                     return new ProximoTurno(false, candidatosDelRival);
                 }
@@ -110,8 +125,9 @@ public class GestorDeJuego {
             default -> throw new IllegalStateException("TipoJugada no soportado: " + jugada.getTipoJugada());
         }
     }
+
     private void pausar() {
-        if (pausarEntreTurnos) {
+        if (!pausarEntreTurnos) {
             return;
         }
         try {
@@ -120,8 +136,9 @@ public class GestorDeJuego {
             Thread.currentThread().interrupt();
         }
     }
+
     private void gano(Jugador ganador) {
-        System.out.println("¡" + ganador.getNombre() + " ganó la partida!");
+        Consola.victoria(ganador.getNombre());
         repositorioMarcador.registrarVictoria(ganador.getNombre());
     }
 }
