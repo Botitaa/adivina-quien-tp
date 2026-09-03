@@ -6,6 +6,7 @@ import valores.Genero;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Pregunta<T> {
 
@@ -68,6 +69,18 @@ public class Pregunta<T> {
         }
 
         return filtrado;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pregunta<?> otra)) return false;
+        return atributo == otra.atributo && valor.equals(otra.valor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(atributo, valor);
     }
 
     @Override
