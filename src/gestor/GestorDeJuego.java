@@ -2,37 +2,52 @@ package gestor;
 
 import actores.Historial;
 import actores.Jugador;
+import actores.JugadorHumano;
 import dominio.CatalogoPersonajes;
 import dominio.Jugada;
 import dominio.Personaje;
 import dominio.Pregunta;
 import dominio.ProximoTurno;
 import persistencia.RepositorioMarcador;
+import presentacion.Consola;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class GestorDeJuego {
+
+    private static final int MS_PAUSA_ESPECTADOR = 1500;
+    private static final int JUGADAS_RECIENTES = 3;
 
     private final Jugador jugadorA;
     private final Jugador jugadorB;
     private final RepositorioMarcador repositorioMarcador;
     private final Historial historial;
     private final Random random;
-    private final boolean pausarEntreTurnos;
+    private final Scanner scanner;
+    private final boolean modoEspectador;
 
+    /** Sin pausas ni entrada de teclado: útil para simulaciones masivas. */
     public GestorDeJuego(Jugador jugadorA, Jugador jugadorB, RepositorioMarcador repositorioMarcador) {
-        this(jugadorA, jugadorB, repositorioMarcador, false);
+        this(jugadorA, jugadorB, repositorioMarcador, null, false);
     }
 
+    /**
+     * @param scanner        se usa para esperar ENTER entre turnos cuando hay un humano jugando;
+     *                       puede ser null si no hay pausa interactiva
+     * @param modoEspectador true en Máquina vs Máquina: pausa temporizada en vez de ENTER
+     */
     public GestorDeJuego(Jugador jugadorA, Jugador jugadorB, RepositorioMarcador repositorioMarcador,
-                         boolean pausarEntreTurnos) {
+                         Scanner scanner, boolean modoEspectador) {
         this.jugadorA = jugadorA;
         this.jugadorB = jugadorB;
         this.repositorioMarcador = repositorioMarcador;
         this.historial = new Historial();
         this.random = new Random();
-        this.pausarEntreTurnos = pausarEntreTurnos;
+        this.scanner = scanner;
+        this.modoEspectador = modoEspectador;
     }
 
     public void iniciarPartida() {
@@ -40,16 +55,22 @@ public class GestorDeJuego {
 
         List<Personaje> candidatosDeA = CatalogoPersonajes.generar();
         List<Personaje> candidatosDeB = CatalogoPersonajes.generar();
+        int totalCatalogo = candidatosDeA.size();
 
+        Consola.cargando("Sorteando quién empieza", 3);
         Jugador turnoActual = sortearJugadorInicial();
         Jugador rival = (turnoActual == jugadorA) ? jugadorB : jugadorA;
+        Consola.info("Empieza " + turnoActual.getNombre());
+        Consola.cuentaRegresiva();
 
         boolean hayGanador = false;
+        int numeroTurno = 0;
 
         while (!hayGanador) {
+            numeroTurno++;
             List<Personaje> candidatosDelRival = (rival == jugadorA) ? candidatosDeA : candidatosDeB;
 
-            ProximoTurno resultado = jugarTurno(turnoActual, rival, candidatosDelRival);
+            ProximoTurno resultado = jugarTurno(turnoActual, rival, candidatosDelRival, numeroTurno, totalCatalogo);
 
             if (rival == jugadorA) {
                 candidatosDeA = resultado.candidatos();
@@ -58,7 +79,7 @@ public class GestorDeJuego {
             }
 
             if (resultado.hayGanador()) {
-                gano(turnoActual);
+                gano(turnoActual, numeroTurno);
                 hayGanador = true;
             } else {
                 Jugador temp = turnoActual;
@@ -79,12 +100,20 @@ public class GestorDeJuego {
     }
 
     /**
-     * Logging centralizado: todo lo que se imprime del proceso de una
-     * partida vive acá, no en las clases de Jugador. Así el log es
-     * consistente sin importar si juega un humano o cualquier IA.
+     * Logging centralizado: todo lo que se muestra del proceso de una
+     * partida sale de acá (vía Consola), no de las clases de Jugador.
+     * Así el log es consistente sin importar si juega un humano o una IA.
      */
-    private ProximoTurno jugarTurno(Jugador turnoActual, Jugador rival, List<Personaje> candidatosDelRival) {
-        Consola.encabezadoTurno(turnoActual.getNombre());
+    private ProximoTurno jugarTurno(Jugador turnoActual, Jugador rival, List<Personaje> candidatosDelRival,
+                                    int numeroTurno, int totalCatalogo) {
+        Consola.encabezadoTurno(turnoActual.getNombre(), numeroTurno);
+        Consola.historialReciente(ultimasJugadas());
+
+        // Detalle puramente de presentación: la animación de "pensando" solo tiene
+        // sentido cuando no hay un humano escribiendo. No afecta la lógica del juego.
+        if (!(turnoActual instanceof JugadorHumano)) {
+            Consola.pensando(turnoActual.getNombre());
+        }
 
         Jugada jugada = turnoActual.decidirJugada(candidatosDelRival, historial);
 
@@ -99,8 +128,8 @@ public class GestorDeJuego {
                 historial.registrar(turnoActual, pregunta, respuesta);
 
                 List<Personaje> filtrados = pregunta.filtrar(candidatosDelRival, respuesta);
-                Consola.candidatosRestantes(turnoActual.getNombre(), filtrados.size());
-                Consola.listarCandidatos(filtrados);
+                Consola.candidatosRestantes(turnoActual.getNombre(), filtrados.size(), totalCatalogo);
+                Consola.tablero(filtrados);
 
                 pausar();
                 return new ProximoTurno(false, filtrados);
@@ -111,13 +140,14 @@ public class GestorDeJuego {
 
                 if (rival.esMiPersonajeSecreto(personajeAdivinado)) {
                     Consola.aciertoAdivinanza(personajeAdivinado);
-                    pausar();
                     return new ProximoTurno(true, candidatosDelRival);
                 } else {
                     Consola.falloAdivinanza(rival.getNombre(), personajeAdivinado);
+                    // Decisión de diseño (2/9): una adivinanza fallida es una certeza tan válida
+                    // como una respuesta, así que el personaje se descarta de la lista del rival.
                     candidatosDelRival.remove(personajeAdivinado);
-                    Consola.candidatosRestantes(turnoActual.getNombre(), candidatosDelRival.size());
-                    Consola.listarCandidatos(candidatosDelRival);
+                    Consola.candidatosRestantes(turnoActual.getNombre(), candidatosDelRival.size(), totalCatalogo);
+                    Consola.tablero(candidatosDelRival);
                     pausar();
                     return new ProximoTurno(false, candidatosDelRival);
                 }
@@ -126,19 +156,31 @@ public class GestorDeJuego {
         }
     }
 
-    private void pausar() {
-        if (!pausarEntreTurnos) {
-            return;
+    private List<String> ultimasJugadas() {
+        List<Historial.Entrada> jugadas = historial.getJugadas();
+        int desde = Math.max(0, jugadas.size() - JUGADAS_RECIENTES);
+        List<String> lineas = new ArrayList<>();
+        for (Historial.Entrada entrada : jugadas.subList(desde, jugadas.size())) {
+            lineas.add(entrada.toString());
         }
-        try {
-            Thread.sleep(1200);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        return lineas;
+    }
+
+    /** Espectador: pausa temporizada. Humano: espera ENTER. Sin scanner: sin pausa. */
+    private void pausar() {
+        if (modoEspectador) {
+            try {
+                Thread.sleep(MS_PAUSA_ESPECTADOR);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        } else if (scanner != null) {
+            Consola.esperarEnter(scanner);
         }
     }
 
-    private void gano(Jugador ganador) {
-        Consola.victoria(ganador.getNombre());
+    private void gano(Jugador ganador, int turnos) {
+        Consola.victoria(ganador.getNombre(), turnos);
         repositorioMarcador.registrarVictoria(ganador.getNombre());
     }
 }
