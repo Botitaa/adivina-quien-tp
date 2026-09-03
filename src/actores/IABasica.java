@@ -23,11 +23,11 @@ public class IABasica implements Jugador {
         asignarSecreto(personajesDisponible.get(indice));
     }
     private void asignarSecreto(Personaje personaje){
-        if(personajeSecreto == null){
+        if(personaje == null){
             throw new IllegalArgumentException("El personaje no puede ser null");
         }
         if (this.personajeSecreto != null) {
-            throw new IllegalArgumentException("El personaje secreto de " + nombre + " ya fue asignado y no puede reasignarse");
+            throw new IllegalStateException("El personaje secreto de " + nombre + " ya fue asignado y no puede reasignarse");
         }
         this.personajeSecreto = personaje;
     }
