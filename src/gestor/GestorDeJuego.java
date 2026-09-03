@@ -28,7 +28,7 @@ public class GestorDeJuego {
         this.random = new Random();
     }
 
-    public int iniciarPartida() {
+    public void iniciarPartida() {
         elegirPersonajesSecretos();
 
         List<Personaje> candidatosDeA = CatalogoPersonajes.generar();
@@ -38,13 +38,11 @@ public class GestorDeJuego {
         Jugador rival = (turnoActual == jugadorA) ? jugadorB : jugadorA;
 
         boolean hayGanador = false;
-        int cantidadTurnos = 0;
 
         while (!hayGanador) {
             List<Personaje> candidatosDelRival = (rival == jugadorA) ? candidatosDeA : candidatosDeB;
 
             ProximoTurno resultado = jugarTurno(turnoActual, rival, candidatosDelRival);
-            cantidadTurnos++;
 
             if (rival == jugadorA) {
                 candidatosDeA = resultado.candidatos();
@@ -61,8 +59,6 @@ public class GestorDeJuego {
                 rival = temp;
             }
         }
-
-        return cantidadTurnos;
     }
 
     private void elegirPersonajesSecretos() {
