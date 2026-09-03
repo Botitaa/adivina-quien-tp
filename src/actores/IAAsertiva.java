@@ -19,25 +19,57 @@ public class IAAsertiva implements Jugador {
 
     @Override
     public void elegirPersonajeSecreto(List<Personaje> personajesDisponibles) {
-        // validar lista no nula/vacía
-        // validar que personajeSecreto todavía no fue asignado
-        // elegir uno al azar con random.nextInt(...) y asignarlo
+
+        if(personajesDisponibles.isEmpty()){
+            throw new IllegalArgumentException("La lista de personajes disponibles no puede ser nula ni vacía");
+        }
+
+        if (personajeSecreto == null){
+            personajeSecreto = personajesDisponibles.get(random.nextInt(personajesDisponibles.size()));
+        }
     }
 
     @Override
     public Jugada decidirJugada(List<Personaje> candidatos, Historial historial) {
-        // si candidatos.size() == 1 -> Jugada.deAdivinanza(...)
-        // si no, buscar la mejor pregunta (ver elegirMejorPregunta)
-        // si no hay ninguna discriminante sin hacer -> Jugada.deAdivinanza(candidatos.get(0))
-        // si hay -> Jugada.dePregunta(...)
-        return null;
+
+        if (candidatos.size() == 1) {
+            return Jugada.deAdivinanza(candidatos.get(0));
+        }
+
+        Pregunta<?> mejorPregunta = elegirMejorPregunta(candidatos, historial);
+
+        if (mejorPregunta == null){
+            return Jugada.deAdivinanza(candidatos.get(0));
+        }
+
+        return Jugada.dePregunta(mejorPregunta);
     }
 
-    // Recorre Pregunta.generarTodas(), descarta las ya hechas por "this" (historial.yaSePregunto),
-    // calcula ratio = max(cumplen,noCumplen)/(double)min(cumplen,noCumplen) para las que sí discriminan,
-    // devuelve la de menor ratio (o null si no queda ninguna).
     private Pregunta<?> elegirMejorPregunta(List<Personaje> candidatos, Historial historial) {
-        return null;
+
+        List<Pregunta<?>> preguntas = Pregunta.generarTodas();
+        Pregunta<?> mejorPregunta = null;
+        double menorRatio = Double.POSITIVE_INFINITY;
+
+        for (int i = 0; i < preguntas.size(); i++) {
+            if (historial.yaSePregunto(preguntas.get(i), this)){
+                continue;
+            } else {
+                Pregunta<?> pregunta = preguntas.get(i);
+
+                List<Personaje> cumplen = pregunta.filtrar(candidatos,true);
+                List<Personaje> noCumplen = pregunta.filtrar(candidatos,false);
+
+                double ratio = (double) Math.max(cumplen.size(),noCumplen.size())/ (double) Math.min(cumplen.size(), noCumplen.size());
+
+                if (ratio< menorRatio){
+                    menorRatio = ratio;
+                    mejorPregunta = pregunta;
+                }
+            }
+        }
+
+        return mejorPregunta;
     }
 
     @Override
@@ -47,13 +79,22 @@ public class IAAsertiva implements Jugador {
 
     @Override
     public boolean responder(Pregunta<?> pregunta) {
-        // evaluar la pregunta contra personajeSecreto (validar que no sea null antes)
-        return false;
+
+        if (personajeSecreto == null){
+            throw new IllegalStateException("todavia no hay personaje secreto");
+        } else {
+            return pregunta.evaluar(personajeSecreto);
+        }
+
     }
 
     @Override
     public boolean esMiPersonajeSecreto(Personaje personaje) {
-        // comparar personajeSecreto.getId() con personaje.getId() (validar nulls antes)
-        return false;
+
+        if (personajeSecreto == null){
+            throw new IllegalStateException("todavia no hay personaje secreto");
+        } else {
+            return personajeSecreto.getId() == personaje.getId();
+        }
     }
 }
