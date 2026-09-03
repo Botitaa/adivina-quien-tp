@@ -19,13 +19,18 @@ public class GestorDeJuego {
     private final RepositorioMarcador repositorioMarcador;
     private final Historial historial;
     private final Random random;
+    private final boolean pausarEntreTurnos;
 
     public GestorDeJuego(Jugador jugadorA, Jugador jugadorB, RepositorioMarcador repositorioMarcador) {
+        this(jugadorA, jugadorB, repositorioMarcador,false);
+    }
+    public GestorDeJuego(Jugador jugadorA, Jugador jugadorB, RepositorioMarcador repositorioMarcador, boolean pausarEntreTurnos) {
         this.jugadorA = jugadorA;
         this.jugadorB = jugadorB;
         this.repositorioMarcador = repositorioMarcador;
         this.historial = new Historial();
         this.random = new Random();
+        this.pausarEntreTurnos = pausarEntreTurnos;
     }
 
     public void iniciarPartida() {
@@ -77,27 +82,44 @@ public class GestorDeJuego {
         switch (jugada.getTipoJugada()) {
             case PREGUNTA -> {
                 Pregunta<?> pregunta = jugada.getPregunta();
+                System.out.println(turnoActual.getNombre() + " le pregunta a " + rival.getNombre() +":"+ pregunta);
                 boolean respuesta = rival.responder(pregunta);
                 System.out.println(rival.getNombre() + " responde: " + (respuesta ? "Sí" : "No"));
                 historial.registrar(turnoActual, pregunta, respuesta);
                 List<Personaje> filtrados = pregunta.filtrar(candidatosDelRival, respuesta);
                 System.out.println("Le quedan " + filtrados.size() + " candidatos posibles a " + turnoActual.getNombre() + ".");
+
+                pausar();
                 return new ProximoTurno(false, filtrados);
             }
             case ADIVINANZA -> {
                 Personaje personajeAdivinado = jugada.getPersonajeAdivinado();
+                System.out.println(turnoActual.getNombre() + " arriesga: " + rival.getNombre()+ " es: " + personajeAdivinado.getNombre()+ "?");
                 if (rival.esMiPersonajeSecreto(personajeAdivinado)) {
+                    System.out.println("Correcto! Era " + personajeAdivinado.getNombre());
+                    pausar();
                     return new ProximoTurno(true, candidatosDelRival);
                 } else {
                     System.out.println("No, " + rival.getNombre() + " no es " + personajeAdivinado.getNombre() + ". Se descarta de la lista.");
                     candidatosDelRival.remove(personajeAdivinado);
+                    System.out.println("Le quedan " + candidatosDelRival.size() + " candidatos posibles a " + turnoActual.getNombre());
+                    pausar();
                     return new ProximoTurno(false, candidatosDelRival);
                 }
             }
             default -> throw new IllegalStateException("TipoJugada no soportado: " + jugada.getTipoJugada());
         }
     }
-
+    private void pausar() {
+        if (pausarEntreTurnos) {
+            return;
+        }
+        try {
+            Thread.sleep(1200);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
     private void gano(Jugador ganador) {
         System.out.println("¡" + ganador.getNombre() + " ganó la partida!");
         repositorioMarcador.registrarVictoria(ganador.getNombre());
