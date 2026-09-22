@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.VentanaMenu">
   <grid id="27dc6" binding="menu" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="1280" height="1280"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -13,7 +13,8 @@
           <gridbag weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <font name="Phosphate" size="28"/>
+          <enabled value="true"/>
+          <font/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
           <text value="Adivina Quien!"/>
