@@ -16,7 +16,7 @@ public final class ConstantesGUI {
     // =====================================================================
     public static final String TITULO_VENTANA = "Adivina Quién";
     public static final int ANCHO_VENTANA = 1100;
-    public static final int ALTO_VENTANA = 740;
+    public static final int ALTO_VENTANA = 1000;
     public static final int ANCHO_MINIMO_VENTANA = 1000;
     public static final int ALTO_MINIMO_VENTANA = 700;
 
@@ -41,11 +41,9 @@ public final class ConstantesGUI {
     public static final String RUTA_IMAGEN_PORTADA = "/imagenes/portada.png";
     public static final String RUTA_IMAGEN_MODO_VS_MAQUINA = "/imagenes/modo_vs_maquina.png";
     public static final String RUTA_IMAGEN_MODO_ESPECTADOR = "/imagenes/modo_espectador.png";
-    public static final String CARPETA_IMAGENES_PERSONAJES = "/imagenes/personajes/";
-    public static final String EXTENSION_IMAGEN = ".png";
 
-    public static final int ANCHO_IMAGEN_PORTADA = 640;
-    public static final int ALTO_IMAGEN_PORTADA = 220;
+    public static final int ANCHO_IMAGEN_PORTADA = 800;
+    public static final int ALTO_IMAGEN_PORTADA = 500;
     public static final int ANCHO_IMAGEN_MODO = 300;
     public static final int ALTO_IMAGEN_MODO = 300;
     public static final int ESPACIADO_ENTRE_OPCIONES = 60;
