@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.VentanaResultado">
+  <grid id="c0077" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="12">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints><xy x="20" y="20" width="1000" height="700"/></constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <vspacer id="c0067"><constraints><grid row="0" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"></grid></constraints></vspacer>
+      <component id="c0068" class="javax.swing.JLabel" binding="lblResultado"><constraints><grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="¡Ganaste!"/></properties></component>
+      <component id="c0069" class="javax.swing.JLabel" binding="lblDetalle"><constraints><grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="La partida duró N turnos"/></properties></component>
+      <hspacer id="c006a"><constraints><grid row="3" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints></hspacer>
+      <hspacer id="c006b"><constraints><grid row="3" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints></hspacer>
+      <grid id="c006e" binding="panelSecretos" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints><grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c006c" class="javax.swing.JLabel" binding="lblSecretoIzquierda"><constraints><grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Personaje izquierda"/></properties></component>
+          <component id="c006d" class="javax.swing.JLabel" binding="lblSecretoDerecha"><constraints><grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Personaje derecha"/></properties></component>
+        </children>
+      </grid>
+      <component id="c006f" class="javax.swing.JLabel" binding="lblTituloMarcador"><constraints><grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="MARCADOR"/></properties></component>
+      <scrollpane id="c0071" binding="scrollMarcador">
+        <constraints><grid row="5" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+  <preferred-size width="420" height="150"/>
+</grid></constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c0070" class="javax.swing.JTable" binding="tablaMarcador"><constraints/><properties/></component>
+        </children>
+      </scrollpane>
+      <grid id="c0075" binding="panelBotones" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints><grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c0072" class="javax.swing.JButton" binding="btnMenu"><constraints><grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Volver al menú"/></properties></component>
+          <component id="c0073" class="javax.swing.JButton" binding="btnRevancha"><constraints><grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Otra partida"/></properties></component>
+          <component id="c0074" class="javax.swing.JButton" binding="btnSalir"><constraints><grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Salir"/></properties></component>
+        </children>
+      </grid>
+      <vspacer id="c0076"><constraints><grid row="7" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"></grid></constraints></vspacer>
+    </children>
+  </grid>
+</form>

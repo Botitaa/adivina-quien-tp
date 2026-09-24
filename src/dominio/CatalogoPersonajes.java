@@ -37,6 +37,6 @@ public class CatalogoPersonajes {
             }
         }
 
-        return personajes;
+        return OrdenadorPersonajes.ordenarPorId(personajes); // MergeSort (D&C), criterio: id ascendente
     }
 }
