@@ -1,24 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.VentanaJuego">
-  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
-    <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
-    </constraints>
+  <grid id="c004f" binding="panelPrincipal" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints><xy x="20" y="20" width="1000" height="700"/></constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="fd252" class="javax.swing.JButton" binding="btnPreguntar">
-        <constraints border-constraint="South"/>
-        <properties>
-          <text value="Preguntar"/>
-        </properties>
-      </component>
-      <component id="b2f2c" class="javax.swing.JButton" binding="btnAdivinar">
-        <constraints border-constraint="Center"/>
-        <properties>
-          <text value="Adivinar"/>
-        </properties>
-      </component>
+      <grid id="c0038" binding="panelEncabezado" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints><grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c0034" class="javax.swing.JLabel" binding="lblTurno"><constraints><grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Tu turno"/></properties></component>
+          <component id="c0035" class="javax.swing.JLabel" binding="lblNumeroTurno"><constraints><grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Turno 1"/></properties></component>
+          <component id="c0036" class="javax.swing.JLabel" binding="lblMiSecreto"><constraints><grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Tu personaje"/></properties></component>
+          <component id="c0037" class="javax.swing.JButton" binding="btnAbandonar"><constraints><grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Abandonar"/></properties></component>
+        </children>
+      </grid>
+      <grid id="c003c" binding="panelTableroJugador" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints><grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c0039" class="javax.swing.JLabel" binding="lblTituloTablero"><constraints><grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Candidatos para el personaje de la máquina"/></properties></component>
+          <component id="c003a" class="javax.swing.JProgressBar" binding="barraJugador"><constraints><grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints><properties/></component>
+          <grid id="c003b" binding="contenedorTableroJugador" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints><grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints>
+            <properties/>
+            <border type="etched" title="Tablero de cartas (se completa por código)"/>
+            <children/>
+          </grid>
+        </children>
+      </grid>
+      <component id="c003d" class="javax.swing.JLabel" binding="lblAviso"><constraints><grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Mensajes para el jugador"/></properties></component>
+      <grid id="c004e" binding="panelInferior" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints><grid row="3" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"></grid></constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="c0044" binding="panelPreguntas" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints><grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"></grid></constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="c003e" class="javax.swing.JLabel" binding="lblTituloPreguntas"><constraints><grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Preguntas"/></properties></component>
+              <scrollpane id="c0040" binding="scrollPreguntas">
+                <constraints><grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"></grid></constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="c003f" class="javax.swing.JList" binding="listPreguntas"><constraints/><properties/></component>
+                </children>
+              </scrollpane>
+              <component id="c0041" class="javax.swing.JButton" binding="btnPreguntar"><constraints><grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Preguntar"/></properties></component>
+              <component id="c0042" class="javax.swing.JButton" binding="btnAdivinar"><constraints><grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Adivinar"/></properties></component>
+              <component id="c0043" class="javax.swing.JButton" binding="btnCancelarAdivinanza"><constraints><grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Cancelar"/></properties></component>
+            </children>
+          </grid>
+          <grid id="c0048" binding="panelRespuestas" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints><grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"></grid></constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="c0045" class="javax.swing.JLabel" binding="lblTituloRespuestas"><constraints><grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Respuestas"/></properties></component>
+              <scrollpane id="c0047" binding="scrollRespuestas">
+                <constraints><grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"></grid></constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="c0046" class="javax.swing.JList" binding="listRespuestas"><constraints/><properties/></component>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
+          <grid id="c004d" binding="panelMaquina" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints><grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"></grid></constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="c0049" class="javax.swing.JLabel" binding="lblTituloMaquina"><constraints><grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Máquina"/></properties></component>
+              <component id="c004a" class="javax.swing.JLabel" binding="lblRestantesMaquina"><constraints><grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"></grid></constraints><properties><text value="Le quedan N de 23"/></properties></component>
+              <component id="c004b" class="javax.swing.JProgressBar" binding="barraMaquina"><constraints><grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"></grid></constraints><properties/></component>
+              <grid id="c004c" binding="contenedorTableroMaquina" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints><grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"></grid></constraints>
+                <properties/>
+                <border type="etched" title="Tablero de la máquina"/>
+                <children/>
+              </grid>
+            </children>
+          </grid>
+        </children>
+      </grid>
     </children>
   </grid>
 </form>

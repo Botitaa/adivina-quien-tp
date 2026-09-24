@@ -2,14 +2,12 @@ package persistencia;
 
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class RepositorioMarcadorArchivo implements RepositorioMarcador {
     private static final String DELIMITADOR = ";";
@@ -28,18 +26,6 @@ public class RepositorioMarcadorArchivo implements RepositorioMarcador {
                 throw new IllegalStateException("No se pudo crear el archivo de marcador: " + archivo, e);
             }
         }
-    }
-
-    @Override
-    public Optional<RegistroMarcador> buscarPorNombre(String nombreJugador) {
-        List<RegistroMarcador> registros = leerTodos();
-
-        for (RegistroMarcador registro: registros){
-            if (registro.nombreJugador().equals(nombreJugador)) {
-                return Optional.of(registro);
-            }
-        }
-        return Optional.empty();
     }
 
     @Override
@@ -70,7 +56,7 @@ public class RepositorioMarcadorArchivo implements RepositorioMarcador {
     private List<RegistroMarcador> leerTodos() {
         List<RegistroMarcador> registros = new ArrayList<>();
 
-        try (BufferedReader lector = new BufferedReader(new FileReader(archivo.toFile()))) {
+        try (BufferedReader lector = Files.newBufferedReader(archivo, StandardCharsets.UTF_8)) {
             String linea;
             while ((linea = lector.readLine()) != null) {
                 if (linea.isBlank()) {
@@ -88,7 +74,7 @@ public class RepositorioMarcadorArchivo implements RepositorioMarcador {
     }
 
     private void escribirTodos(List<RegistroMarcador> registros) {
-        try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo.toFile()))) {
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivo, StandardCharsets.UTF_8)) {
             for (RegistroMarcador registro:registros) {
                 escritor.write(registro.nombreJugador() + DELIMITADOR + registro.partidasGanadas());
                 escritor.newLine();
